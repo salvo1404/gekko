@@ -21,9 +21,11 @@ const Actor = function() {
     '/advice': 'emitAdvice',
     '/subscribe': 'emitSubscribe',
     '/unsubscribe': 'emitUnSubscribe',
+    '/balance': 'emitBalance',
     '/price': 'emitPrice',
     '/help': 'emitHelp'
   };
+
   if (telegrambot.donate) {
     this.commands['/donate'] = 'emitDonate';
   }
@@ -40,6 +42,70 @@ Actor.prototype.processCandle = function(candle, done) {
 
   done();
 };
+
+Actor.prototype.processRoundtrip = function(roundtrip) {
+  
+  // var roundtrip = {
+  //   id: this.roundTrip.id,
+
+  //   entryAt: this.roundTrip.entry.date,
+  //   entryPrice: this.roundTrip.entry.price,
+  //   entryBalance: this.roundTrip.entry.total,
+
+  //   exitAt: this.roundTrip.exit.date,
+  //   exitPrice: this.roundTrip.exit.price,
+  //   exitBalance: this.roundTrip.exit.total,
+
+  //   duration: this.roundTrip.exit.date.diff(this.roundTrip.entry.date)
+  // }
+
+  // roundtrip.pnl = roundtrip.exitBalance - roundtrip.entryBalance;
+  // roundtrip.profit = (100 * roundtrip.exitBalance / roundtrip.entryBalance) - 100;
+
+  var message = 'RoundTrip.\nEntry date (UTC): ' + roundtrip.entryAt +
+    '\nEntry Price: ' + roundtrip.entryPrice +
+    '\nEntry Balance: ' + roundtrip.entryBalance +
+    '\n\nExit date (UTC): ' + roundtrip.exitAt +
+    '\nExit Price: ' + roundtrip.exitPrice +
+    '\nexit Balance: ' + roundtrip.exitBalance +
+    '\n\nDuration: ' + roundtrip.duration +
+    '\nPNL: ' + roundtrip.pnl +
+    '\nProfit: ' + roundtrip.profit;
+
+  this.bot.sendMessage(this.chatId, message);
+}
+
+Actor.prototype.processPerformanceReport = function(report) {
+  // const report = {
+  //   startTime: this.dates.start.utc().format('YYYY-MM-DD HH:mm:ss'),
+  //   endTime: this.dates.end.utc().format('YYYY-MM-DD HH:mm:ss'),
+  //   timespan: timespan.humanize(),
+  //   market: this.endPrice * 100 / this.startPrice - 100,
+
+  //   balance: this.balance,
+  //   profit,
+  //   relativeProfit: relativeProfit,
+
+  //   yearlyProfit: profit / timespan.asYears(),
+  //   relativeYearlyProfit,
+
+  //   startPrice: this.startPrice,
+  //   endPrice: this.endPrice,
+  //   trades: this.trades,
+  //   startBalance: this.start.balance,
+  //   exposure: percentExposure,
+  //   sharpe,
+  //   downside
+  // }
+
+  var message = 'Profit Report.' + 
+  '\nTrades: ' + report.trades + 
+  '\nOriginal Balance: ' + report.startBalance.toFixed(8) +
+  '\nCurrent Balance: ' + report.balance.toFixed(8) +
+  '\nProfit: ' + report.profit.toFixed(8) + ' ' + config.watch.currency + ' (' + report.relativeProfit.toFixed(8) + '\%)';
+
+  this.bot.sendMessage(this.chatId, message);
+}
 
 Actor.prototype.processAdvice = function(advice) {
   if (advice.recommendation === 'soft') return;
@@ -99,6 +165,10 @@ Actor.prototype.verifyQuestion = function(msg, text) {
 
 Actor.prototype.emitStart = function() {
   this.bot.sendMessage(this.chatId, 'Hello! How can I help you?');
+};
+
+Actor.prototype.emitBalance = function() {
+  this.bot.sendMessage(this.chatId, 'Hello! You suck');
 };
 
 Actor.prototype.emitSubscribe = function() {
