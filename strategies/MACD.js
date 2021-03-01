@@ -54,6 +54,15 @@ method.log = function() {
   log.debug('\t', 'macd:', diff.toFixed(digits));
   log.debug('\t', 'signal:', signal.toFixed(digits));
   log.debug('\t', 'macdiff:', macd.result.toFixed(digits));
+  log.debug('Candle properties:');
+  log.debug('\t', 'start:', candle.start);
+  log.debug('\t', 'open:', candle.open);
+  log.debug('\t', 'high:', candle.high);
+  log.debug('\t', 'low:', candle.low);
+  log.debug('\t', 'close:', candle.close);
+  log.debug('\t', 'vwp:', candle.vwp);
+  log.debug('\t', 'volume:', candle.volume);
+  log.debug('\t', 'trades:', candle.trades);
 }
 
 method.check = function() {

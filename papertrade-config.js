@@ -41,7 +41,7 @@ config.telegrambot = {
   enabled: true,
   // Receive notifications for trades and warnings/errors related to trading
   emitTrades: false,
-  token: '1542742378:AAGXem5klF6sn1a-QMAUtrasDbkMM24bjNw',
+  token: '',
 };
 
 
